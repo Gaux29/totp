@@ -1,0 +1,32 @@
+name: totp
+description: A new Flutter project.
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.3 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: any
+  google_fonts: any
+  smooth_page_indicator: any
+  page_transition: any
+  flutter_otp_text_field: any
+  http: any
+  hive_flutter: any
+  quickalert: any
+  intl: any
+  device_info_plus: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: any
+
+
+
+flutter:
+  uses-material-design: true
