@@ -27,44 +27,38 @@ class _DashboardState extends State<Dashboard> {
   DateTime? update;
 
   void generateOtp() {
-    print("USER ID: ${jsonDecode(GetDetails.user ?? "")?["userId"]}");
-/*    ApiCall.request(
-      path: "generateToken",
-      method: HttpMethod.post,
-      body: {
-        // "mobileNo": GetDetails.number?.trim() ?? "",
-        // "sessionId": widget.sessionId,
-        "userId": GetDetails.user ?? "SONAL416",
-      },
-    ).then(value){
-      print(value);
-    };*/
+    // Cancel any existing timer to prevent overlapping.
+    // _timer?.cancel();
+    // _timer = null;
+    print("Stored Data: ${jsonDecode(GetDetails.user ?? "")?["mobileNo"]}");
+    QuickAlert.show(context: context, type: QuickAlertType.loading);
     ApiCall.request(
       path: "generateotp",
       method: HttpMethod.post,
       body: {
-        // "mobileNo": GetDetails.number?.trim() ?? "",
-        // "sessionId": widget.sessionId,
         "userId": jsonDecode(GetDetails.user ?? "")?["userId"],
         "token": dashboardToken.text,
       },
     ).then((value) {
+      Navigator.pop(context);
       update = DateTime.now();
       print("Json Data: ${jsonDecode(value)}");
+
       if (jsonDecode(value) != null && jsonDecode(value)['status']) {
         setState(() {
           account = Account.fromJson(jsonDecode(value)['data']);
           progressValue = 1.0;
-          int counter = 0;
-// Setting Timer when success message will be removed as per the requirements
+
+          // Start a single timer.
           _timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
             setState(() {
-              progressValue -= 1 / 60;
+              progressValue -=
+                  1 / 60; // Reduce progressValue smoothly over 60 seconds.
             });
 
-            counter++;
-            if (counter % 60 == 0) {
-              generateOtp();
+            if (progressValue <= 0) {
+              t.cancel(); // Cancel the timer when progressValue reaches 0.
+              generateOtp(); // Recursively call generateOtp to repeat the process.
             }
           });
         });
@@ -75,6 +69,9 @@ class _DashboardState extends State<Dashboard> {
           text: jsonDecode(value)['message'],
         );
       }
+    }).catchError((error) {
+      print("Error: $error");
+      // Handle error case if necessary.
     });
   }
 
