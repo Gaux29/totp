@@ -22,6 +22,7 @@ class GetStarted extends StatefulWidget {
 class _GetStartedState extends State<GetStarted> {
   bool otp = false;
   TextEditingController mobileNumber = TextEditingController();
+  TextEditingController userId = TextEditingController();
   TextEditingController oneTimePassword = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
@@ -107,42 +108,84 @@ class _GetStartedState extends State<GetStarted> {
                   ],
                 ),
               if (!otp)
-                Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: TextFormField(
-                    keyboardType: TextInputType.number,
-                    controller: mobileNumber,
-                    validator: (value) {
-                      // Add a validator
-                      if (value == null || value.isEmpty || value.length < 10) {
-                        return 'Please enter a valid mobile number';
-                      }
-                      return null;
-                    },
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly,
-                      LengthLimitingTextInputFormatter(
-                        10,
-                      ), // for limiting the length to 10 digits
-                    ],
-                    decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(horizontal: 20),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.teal,
+                Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: TextFormField(
+                        keyboardType: TextInputType.text,
+                        controller: userId,
+                        validator: (value) {
+                          // Add a validator
+                          if (value == null || value.isEmpty) {
+                            return 'User Id cannot be empty';
+                          }
+                          return null;
+                        },
+                        inputFormatters: <TextInputFormatter>[
+                          LengthLimitingTextInputFormatter(
+                            18,
+                          ),
+                        ],
+                        decoration: const InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 20),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.teal,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.teal,
+                            ),
+                          ),
+                          // label: Text("CUSTOMER ID",style: TextStyle(color: Colors.grey),),
+                          labelText: "User Id ",
+                          labelStyle: TextStyle(color: Colors.grey),
+                          floatingLabelStyle: TextStyle(color: Colors.teal),
                         ),
                       ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.teal,
-                        ),
-                      ),
-                      // label: Text("CUSTOMER ID",style: TextStyle(color: Colors.grey),),
-                      labelText: "Mobile Number",
-                      labelStyle: TextStyle(color: Colors.grey),
-                      floatingLabelStyle: TextStyle(color: Colors.teal),
                     ),
-                  ),
+                    Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: TextFormField(
+                        keyboardType: TextInputType.phone,
+                        controller: mobileNumber,
+                        validator: (value) {
+                          // Add a validator
+                          if (value == null ||
+                              value.isEmpty ||
+                              value.length < 10) {
+                            return 'Please enter a valid mobile number';
+                          }
+                          return null;
+                        },
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(
+                            10,
+                          ), // for limiting the length to 10 digits
+                        ],
+                        decoration: const InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 20),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.teal,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.teal,
+                            ),
+                          ),
+                          // label: Text("CUSTOMER ID",style: TextStyle(color: Colors.grey),),
+                          labelText: "Mobile Number",
+                          labelStyle: TextStyle(color: Colors.grey),
+                          floatingLabelStyle: TextStyle(color: Colors.teal),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -324,7 +367,8 @@ class _GetStartedState extends State<GetStarted> {
       // Determine which endpoint and request body to use.
       final path = otp ? "validateotp" : "sendOtp";
       final requestBody = otp
-          ? {"mobileNo": mobileNumber.text, "otp": oneTimePassword.text}
+          ? {/*"userId": userId.text,*/"mobileNo": mobileNumber.text, "otp": oneTimePassword.text}
+          // Here will be the user id in the input
           : {"mobileNo": mobileNumber.text};
 
       try {
@@ -353,11 +397,11 @@ class _GetStartedState extends State<GetStarted> {
               MaterialPageRoute(
                 builder: (context) => GetDetails(
                   mobileNumber: mobileNumber.text,
+                  userId: userId.text,
                 ),
               ),
             );
           } else {
-
             // We just sent the OTP; now we switch to the OTP input UI.
             try {
               // Attempt to get device info (optional).
