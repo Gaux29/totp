@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+
 import 'package:http/http.dart' as http;
 
 /// Exception thrown when an error occurs during an API call.
@@ -18,6 +19,8 @@ enum HttpMethod { get, post, delete }
 /// [ApiCall] class provides methods to perform HTTP requests to an API and handle the responses.
 class ApiCall {
   /// The host URL of the API.
+  // static const host = "http://10.104.9.210:9406";
+  // static const host = "http://10.104.12.25:9846";
   static const host = "https://uat.silsaas.co.in:9116";
 
   /// The base URL of the API.
@@ -48,9 +51,12 @@ class ApiCall {
 
     // Log the request details
     log('Request URL: $url', name: 'ApiCall');
-    log('Request Method: ${method.toString().split('.').last}', name: 'ApiCall');
-    if (headers != null) log('Request Headers: ${json.encode(headers)}', name: 'ApiCall');
-    if (body != null) log('Request Body: ${json.encode(body)}', name: 'ApiCall');
+    log('Request Method: ${method.toString().split('.').last}',
+        name: 'ApiCall');
+    if (headers != null)
+      log('Request Headers: ${json.encode(headers)}', name: 'ApiCall');
+    if (body != null)
+      log('Request Body: ${json.encode(body)}', name: 'ApiCall');
 
     http.Response response;
     try {
@@ -60,11 +66,11 @@ class ApiCall {
           break;
         case HttpMethod.post:
           response =
-          await http.post(url, headers: headers, body: json.encode(body));
+              await http.post(url, headers: headers, body: json.encode(body));
           break;
         case HttpMethod.delete:
           response =
-          await http.delete(url, headers: headers, body: json.encode(body));
+              await http.delete(url, headers: headers, body: json.encode(body));
           break;
       }
     } catch (e) {

@@ -15,12 +15,14 @@ class TokenScreen extends StatefulWidget {
   final String firstName;
   final String lastName;
   final String appPin;
+  final String userId;
   const TokenScreen({
     super.key,
     required this.mobileNumber,
     required this.firstName,
     required this.lastName,
     required this.appPin,
+    required this.userId,
   });
 
   @override
@@ -139,6 +141,7 @@ class _TokenScreenState extends State<TokenScreen> {
                               "${widget.firstName.trim()} ${widget.lastName.trim()}",
                           "token": token.text,
                           "pin": widget.appPin,
+                          "userId": widget.userId,
                         },
                       ).then((value) async {
                         if (jsonDecode(value)["status"]) {
@@ -149,6 +152,7 @@ class _TokenScreenState extends State<TokenScreen> {
                                   "${widget.firstName.trim()} ${widget.lastName.trim()}",
                               "token": token.text,
                               "pin": widget.appPin,
+                              "userId": widget.userId,
                             }),
                           ).then((_) {
                             Navigator.pushAndRemoveUntil(

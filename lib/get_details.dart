@@ -11,7 +11,9 @@ import 'api_call.dart';
 
 class GetDetails extends StatefulWidget {
   final String mobileNumber;
-  const GetDetails({super.key, required this.mobileNumber});
+  final String userId;
+  const GetDetails(
+      {super.key, required this.mobileNumber, required this.userId});
 
   static final Box<String> account = Hive.box("map");
 
@@ -76,7 +78,7 @@ class _GetDetailsState extends State<GetDetails> {
                   ),
                 ),
               ),
-              Padding(
+/*              Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
                   "Please enter your first and last name. This will help us personalize your experience.",
@@ -163,7 +165,7 @@ class _GetDetailsState extends State<GetDetails> {
               ),
               const SizedBox(
                 height: 20,
-              ),
+              ),*/
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
@@ -262,8 +264,8 @@ class _GetDetailsState extends State<GetDetails> {
                           method: HttpMethod.post,
                           body: {
                             "mobileNo": widget.mobileNumber,
-                            "name":
-                                "${firstName.text.trim()} ${lastName.text.trim()}",
+                            "userId": widget
+                                .userId, /*"${firstName.text.trim()} ${lastName.text.trim()}",*/
                             // "otp": oneTimePassword.text
                           },
                         );
@@ -278,6 +280,7 @@ class _GetDetailsState extends State<GetDetails> {
                                 firstName: firstName.text,
                                 lastName: lastName.text,
                                 appPin: appPin.text,
+                                userId: widget.userId,
                               ),
                             ),
                           );

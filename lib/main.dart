@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:totp/login.dart';
 import 'package:totp/sildes.dart';
+
 import 'get_details.dart';
 
 void main() async {
@@ -12,6 +13,8 @@ void main() async {
     statusBarColor: Colors.transparent, // transparent status bar
     statusBarIconBrightness: Brightness.dark, // status bar icons are dark
   ));
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 }
 
 class MyApp extends StatelessWidget {
@@ -20,6 +23,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // For font scale management
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(
+            textScaler: TextScaler.linear(1.0),
+          ), // Locks font scaling
+          child: child!,
+        );
+      },
       // title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
